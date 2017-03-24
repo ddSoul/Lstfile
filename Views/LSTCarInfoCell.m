@@ -173,7 +173,7 @@
     }];
     
     [_selectImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(-30);
+        make.right.mas_equalTo(-20);
         make.width.height.mas_equalTo(20);
         make.centerY.mas_equalTo(weakSelf).mas_offset(10);
     }];
@@ -197,7 +197,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

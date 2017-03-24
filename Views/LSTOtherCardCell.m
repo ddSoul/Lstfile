@@ -20,14 +20,17 @@
     UIButton *_selCarColorBtn;
     
     /** 美工线*/
-    UIView *_1pLineView;
+    UIView *_1pLineView_1;
+    UIView *_1pLineView_2;
+    UIView *_1pLineView_3;
+    UIView *_1pLineView_4;
     UIView *_20pLineView;
     UIView *_bottomLineView;
     
     /** 新增手机号*/
     UILabel *_telLabel;
     UITextField *_inputTelTf;
-
+    
 }
 @end
 
@@ -102,9 +105,22 @@
     _selectImageView = [[UIImageView alloc] init];
     [self.contentView addSubview:_selectImageView];
     
-    _1pLineView = [[UIView alloc] init];
-    _1pLineView.backgroundColor = LSTLine1Color;
-    [self.contentView addSubview:_1pLineView];
+    _1pLineView_1 = [[UIView alloc] init];
+    _1pLineView_1.backgroundColor = LSTLine1Color;
+    [self.contentView addSubview:_1pLineView_1];
+    
+    _1pLineView_2 = [[UIView alloc] init];
+    _1pLineView_2.backgroundColor = LSTLine1Color;
+    [self.contentView addSubview:_1pLineView_2];
+    
+    _1pLineView_3 = [[UIView alloc] init];
+    _1pLineView_3.backgroundColor = LSTLine1Color;
+    [self.contentView addSubview:_1pLineView_3];
+    
+    _1pLineView_4 = [[UIView alloc] init];
+    _1pLineView_4.backgroundColor = LSTLine1Color;
+    [self.contentView addSubview:_1pLineView_4];
+    
     
     _20pLineView = [[UIView alloc] init];
     _20pLineView.backgroundColor = LSTLineWColor;
@@ -121,18 +137,18 @@
         make.height.mas_equalTo(20);
     }];
     
-    [_1pLineView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_1pLineView_1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.left.mas_equalTo(0);
         make.top.mas_equalTo(_20pLineView.mas_bottom).mas_offset(0);
     }];
     
     [_titlelabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(10);
-        make.top.mas_equalTo(_1pLineView.mas_bottom).mas_offset(10);
+        make.top.mas_equalTo(_1pLineView_1.mas_bottom).mas_offset(10);
     }];
     
     [_selectImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(-30);
+        make.right.mas_equalTo(-20);
         make.top.mas_equalTo(30);
         make.width.height.mas_equalTo(20);
     }];
@@ -143,7 +159,7 @@
         make.height.mas_equalTo(1);
         make.bottom.mas_equalTo(0);
     }];
-
+    
 }
 
 #pragma mark - eventTouch Methods
@@ -166,6 +182,9 @@
     _selCarColorBtn.hidden  = isHidden;
     _telLabel.hidden        = isHidden;
     _inputTelTf.hidden      = isHidden;
+    _1pLineView_2.hidden    = isHidden;
+    _1pLineView_3.hidden    = isHidden;
+    _1pLineView_4.hidden    = isHidden;
     
 }
 
@@ -196,59 +215,82 @@
             make.height.mas_equalTo(20);
         }];
         
-        [_1pLineView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        [_1pLineView_1 mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.right.left.mas_equalTo(0);
             make.top.mas_equalTo(_20pLineView.mas_bottom).mas_offset(0);
             make.height.mas_equalTo(1);
         }];
-
         
+        /** 第一行*/
         [_titlelabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(10);
             make.right.mas_equalTo(-10);
-            make.top.mas_equalTo(_1pLineView.mas_bottom).mas_offset(10);
+            make.top.mas_equalTo(_1pLineView_1.mas_bottom).mas_offset(10);
         }];
         
+        [_1pLineView_2 mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.mas_equalTo(0);
+            make.height.mas_equalTo(1);
+            make.top.mas_equalTo(_titlelabel.mas_bottom).mas_offset(10);
+        }];
+        
+        /** 第二行*/
         [_carNumberlabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(10);
             make.top.mas_equalTo(_titlelabel.mas_bottom).mas_offset(20);
         }];
         
-        [_carColorLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(10);
-            make.top.mas_equalTo(_carNumberlabel.mas_bottom).mas_offset(10);
-        }];
-        
         [_carNumberTf mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(-40);
+            make.right.mas_equalTo(-20);
             make.width.mas_equalTo(200);
             make.top.mas_equalTo(_titlelabel.mas_bottom).mas_offset(20);
         }];
         
-        [_selCarColorBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(-20);
-            make.width.mas_equalTo(100);
-            make.height.mas_equalTo(_carColorLabel.mas_height);
-            make.top.mas_equalTo(_carNumberTf.mas_bottom).mas_offset(10);
+        [_1pLineView_3 mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.mas_equalTo(0);
+            make.height.mas_equalTo(1);
+            make.top.mas_equalTo(_carNumberlabel.mas_bottom).mas_offset(10);
         }];
         
-        [_telLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        /** 第三行*/
+        [_carColorLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(10);
+            make.top.mas_equalTo(_carNumberlabel.mas_bottom).mas_offset(20);
+        }];
+        
+        [_selCarColorBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.right.mas_equalTo(0);
+            make.width.mas_equalTo(100);
+            make.height.mas_equalTo(_carColorLabel.mas_height);
+            make.top.mas_equalTo(_carNumberTf.mas_bottom).mas_offset(20);
+        }];
+        
+        [_1pLineView_4 mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.mas_equalTo(0);
+            make.height.mas_equalTo(1);
             make.top.mas_equalTo(_carColorLabel.mas_bottom).mas_offset(10);
         }];
         
-        [_inputTelTf mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(-40);
-            make.width.mas_equalTo(200);
-            make.top.mas_equalTo(_selCarColorBtn.mas_bottom).mas_offset(10);
+        /** 第四行*/
+        [_telLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(10);
+            make.top.mas_equalTo(_carColorLabel.mas_bottom).mas_offset(20);
         }];
         
+        [_inputTelTf mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.right.mas_equalTo(-20);
+            make.width.mas_equalTo(200);
+            make.top.mas_equalTo(_selCarColorBtn.mas_bottom).mas_offset(20);
+        }];
+        
+        /** 右侧图片*/
         [_selectImageView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(-30);
+            make.right.mas_equalTo(-20);
             make.top.mas_equalTo(30);
             make.width.height.mas_equalTo(20);
         }];
         
+        /** 底部美工线*/
         [_bottomLineView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.right.mas_equalTo(0);
             make.top.mas_equalTo(_telLabel.mas_bottom).mas_offset(10);
@@ -265,7 +307,7 @@
             make.height.mas_equalTo(20);
         }];
         
-        [_1pLineView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        [_1pLineView_1 mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.right.left.mas_equalTo(0);
             make.top.mas_equalTo(_20pLineView.mas_bottom).mas_offset(0);
             make.height.mas_equalTo(1);
@@ -273,11 +315,11 @@
         
         [_titlelabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(10);
-            make.top.mas_equalTo(_1pLineView.mas_bottom).mas_offset(10);
+            make.top.mas_equalTo(_1pLineView_1.mas_bottom).mas_offset(10);
         }];
         
         [_selectImageView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(-30);
+            make.right.mas_equalTo(-20);
             make.top.mas_equalTo(30);
             make.width.height.mas_equalTo(20);
         }];
@@ -305,6 +347,18 @@
             //移除约束
         }];
         
+        [_1pLineView_2 mas_remakeConstraints:^(MASConstraintMaker *make) {
+            //移除约束
+        }];
+        
+        [_1pLineView_3 mas_remakeConstraints:^(MASConstraintMaker *make) {
+            //移除约束
+        }];
+        
+        [_1pLineView_4 mas_remakeConstraints:^(MASConstraintMaker *make) {
+            //移除约束
+        }];
+        
         [_telLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             //移除约束
         }];
@@ -320,7 +374,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 
