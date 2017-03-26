@@ -30,4 +30,9 @@
  */
 @property (nonatomic, copy) NSString *stCarNumber;
 
+/**
+ * 手机号
+ */
+@property (nonatomic, copy) NSString *phoneNumber;
+
 @end
