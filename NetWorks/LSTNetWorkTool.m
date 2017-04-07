@@ -27,12 +27,19 @@
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/html", @"text/json", @"text/javascript",@"text/plain", nil];
 
     [manager GET:urlStr parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-        NSLog(@"");
-        if (success) {
-            success(responseObject);
+        
+        /** 根据后台返回数据格式进行处理*/
+        NSInteger errorCode = [responseObject[@"error"][@"errorCode"] integerValue];
+        
+        if (0 == errorCode) {
+            if (success) {
+                success(responseObject);
+            }
+        }else{
+            /** 进行一些错误提示*/
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"");
+        
         if (failure) {
             failure(error);
         }
@@ -49,9 +56,18 @@
     [manager.requestSerializer setValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     
     [manager POST:urlStr parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-        if (success) {
-            success(responseObject);
+        
+        /** 根据后台返回数据格式进行处理*/
+        NSInteger errorCode = [responseObject[@"error"][@"errorCode"] integerValue];
+        
+        if (0 == errorCode) {
+            if (success) {
+                success(responseObject);
+            }
+        }else{
+            /** 进行一些错误提示*/
         }
+
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (failure) {
             failure(error);

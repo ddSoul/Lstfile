@@ -7,15 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LSTCarModel.h"
+#import "LSTEtagOrderModel.h"
 
 @interface LSTAuthCodeVC : UIViewController
 
 /**
- * 构造函数
- *
- * @param phoneNumber 电话号码
- *
+ * 方便后面提交订单业务的处理
  */
-- (instancetype)initWithPhoneNumber:(NSString *)phoneNumber;
+@property (nonatomic, strong) LSTEtagOrderModel *orderModel;
+
+/**
+ * 卡信息Model,订单提交必要参数
+ */
+@property (nonatomic, strong) LSTCarModel *carModel;
 
 @end

@@ -10,4 +10,27 @@
 
 @implementation LSTCarModel
 
++ (NSDictionary *)mj_objectClassInArray
+{
+    return @{
+             @"id" : @"ID",
+             };
+}
+
 @end
+
+//
+@implementation VehicleInfo
+
+
+@end
+
+//
+@implementation VehicleLicense
+
+
+@end
+
+
+
+

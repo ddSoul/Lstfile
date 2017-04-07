@@ -7,7 +7,9 @@
 //
 
 #import "LSTETagDetailView.h"
-#import "LSTEtagModel.h"
+#import "LSTCarModel.h"
+
+#import "NSString+Tools.h"
 
 #define FOND_SIZE_14 ([UIFont systemFontOfSize:14])
 
@@ -45,7 +47,7 @@
 {
 
     UIImageView *topImageView = [[UIImageView alloc] init];
-    topImageView.image = [UIImage imageNamed:@"etclogo"];
+    topImageView.image = [UIImage imageNamed:@"eTagImage"];
     [self addSubview:topImageView];
     
     UILabel *eTagTitleLabel = [[UILabel alloc] init];
@@ -96,6 +98,7 @@
     _stCarNumberLabel.text = @"6666888880000";
     _stCarNumberLabel.textColor = LSTBlack24FontColor;
     [self addSubview:_stCarNumberLabel];
+    
 
     __weak typeof(self) weakSelf = self;
     /** 布局*/
@@ -154,12 +157,12 @@
 /**
  * 赋值
  */
-- (void)setETagModel:(LSTEtagModel *)eTagModel
+- (void)setCarModel:(LSTCarModel *)carModel
 {
-    _eTagLabel.text = eTagModel.eTagNumber;
-    _carNumberLabel.text = eTagModel.carNumber;
-    _carColorLabel.text = eTagModel.carColor;
-    _stCarNumberLabel.text = eTagModel.stCarNumber;
+    _eTagLabel.text = [NSString formateStNumber:carModel.labelNo];
+    _carNumberLabel.text = carModel.vehicleInfo.vehicleLicense.licensePlateNumber;
+    _carColorLabel.text = carModel.vehicleInfo.vehicleColor;
+    _stCarNumberLabel.text = [NSString isNullToString:carModel.cardNo];
 }
 
 @end

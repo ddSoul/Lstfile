@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class LSTEtagModel;
+@class LSTCarModel;
 
 @interface LSTETagDetailView : UIView
 
 /**
  * 电子标签模型
  */
-@property (strong, nonatomic) LSTEtagModel *eTagModel;
+@property (strong, nonatomic) LSTCarModel *carModel;
 
 @end

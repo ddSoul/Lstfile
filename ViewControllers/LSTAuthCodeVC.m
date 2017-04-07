@@ -8,39 +8,36 @@
 
 #import "LSTAuthCodeVC.h"
 #import "LSTEtagLogOffDetailVC.h"
+#import "LSTVertifyCodeViewController.h"
 
 #import "NSString+Tools.h"
 #import "UITextField+Space.h"
 #import "UIView+Toast.h"
+#import "LSTEtagLogoffAPI.h"
+#import "LSTAuthentication.h"
+
+static const CGFloat Line_Height = 1.f;
+static const CGFloat Bottom_Buttom_Height = 120.f;
+static const CGFloat Defult_View_Height = 40.f;
 
 @interface LSTAuthCodeVC ()<UITextFieldDelegate>
 
-@property (nonatomic, strong) UILabel *remindeLable;/** 顶部提示文字*/
-@property (nonatomic, strong) UITextField *authCodeTf;/** 验证码输入框*/
-@property (nonatomic, strong) UIButton *senderAuthCodeBtn;/** 发送验证码按钮*/
-@property (nonatomic, strong) UIButton *commitButton;/** 提交按钮*/
+@property (nonatomic, strong) UILabel *remindeLable;                    /** 顶部提示文字*/
+@property (nonatomic, strong) UITextField *authCodeTf;                  /** 验证码输入框*/
+@property (nonatomic, strong) UIButton *senderAuthCodeBtn;              /** 发送验证码按钮*/
+@property (nonatomic, strong) UIButton *commitButton;                   /** 提交按钮*/
 
-@property (nonatomic, strong) UIView *topLineView;/** 美工线*/
+@property (nonatomic, strong) UIView *topLineView;                      /** 美工线*/
 @property (nonatomic, strong) UIView *bottomLineView;
 
-@property (nonatomic, assign, getter=isActive) BOOL active;/** 页面是否处于活跃状态，便于释放_timer*/
+@property (nonatomic, assign, getter=isActive) BOOL active;             /** 页面是否处于活跃状态，便于释放_timer*/
 @property (nonatomic, copy) NSString *phoneNumberString;
+
+@property (nonatomic, copy) NSString *pwdToken;                         /** 记录pwdToken*/
 
 @end
 
 @implementation LSTAuthCodeVC
-
-#pragma mark - Init 初始化
-- (instancetype)initWithPhoneNumber:(NSString *)phoneNumber
-{
-    self = [super init];
-    if (!self) {
-        return self;
-    }
-    self.title = @"验证码";
-    self.phoneNumberString = phoneNumber;
-    return self;
-}
 
 #pragma mark - life cycle
 - (void)viewDidLoad {
@@ -57,6 +54,8 @@
 - (void)initUI
 {
     self.view.backgroundColor = LSTVCBackgroundColor;
+    self.title = @"验证码";
+    self.phoneNumberString = [NSString stringWithFormat:@"将向手机号%@发送验证码",[NSString hiddenPhoneNumber:self.carModel.phone]];
     
     [self.view addSubview:self.remindeLable];
     [self.view addSubview:self.topLineView];
@@ -78,33 +77,33 @@
     [self.topLineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(0);
         make.top.mas_equalTo(self.remindeLable.mas_bottom).mas_offset(20);
-        make.height.mas_equalTo(1);
+        make.height.mas_equalTo(Line_Height);
     }];
     
     [self.authCodeTf mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
         make.top.mas_equalTo(self.topLineView.mas_bottom).mas_equalTo(0);
-        make.height.mas_equalTo(40);
+        make.height.mas_equalTo(Defult_View_Height);
         make.width.mas_equalTo(SCREEN_WIDTH-120);
     }];
     
     [self.bottomLineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(0);
         make.top.mas_equalTo(self.authCodeTf.mas_bottom).mas_offset(0);
-        make.height.mas_equalTo(1);
+        make.height.mas_equalTo(Line_Height);
     }];
     
     [self.commitButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(0);
         make.top.mas_equalTo(self.bottomLineView.mas_bottom).mas_offset(30);
-        make.height.mas_equalTo(40);
+        make.height.mas_equalTo(Defult_View_Height);
     }];
     
     [self.senderAuthCodeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.authCodeTf.mas_top).mas_offset(0);
         make.bottom.mas_equalTo(self.authCodeTf.mas_bottom).mas_equalTo(0);
         make.right.mas_equalTo(0);
-        make.width.mas_equalTo(120);
+        make.width.mas_equalTo(Bottom_Buttom_Height);
     }];
     
 }
@@ -113,8 +112,8 @@
 #pragma mark - delegate Methods
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
-    textField.text.length ? (self.commitButton.selected = YES, self.commitButton.userInteractionEnabled = YES)
-                            : (self.commitButton.selected = NO, self.commitButton.userInteractionEnabled = NO);
+    textField.text.length ? (self.commitButton.backgroundColor = LSTGreenFontColor, self.commitButton.userInteractionEnabled = YES)
+                            : (self.commitButton.backgroundColor = LSTBlack24FontColor, self.commitButton.userInteractionEnabled = NO);
     return YES;
 }
 
@@ -123,11 +122,22 @@
 - (void)verifyAuthCode
 {
     /** 校验验证码的正确性*/
-    //    self.active = NO;
-        LSTEtagLogOffDetailVC *labelsDetailVc = [[LSTEtagLogOffDetailVC alloc] init];
-        [self.navigationController pushViewController:labelsDetailVc animated:YES];
-    
-//    [self.view makeToast:@"验证验证码"];
+    self.active = NO;
+    [LSTEtagLogoffAPI vertifyAuthCodeWithCode:self.authCodeTf.text pwdtoken:self.pwdToken success:^(id result) {
+        //需要提交订单
+        [LSTEtagLogoffAPI postOrderWithOrder:self.orderModel carModel:self.carModel success:^(id result) {
+            /** 提交订单,成功之后做跳转，可在之前加等待动画*/
+            LSTEtagLogOffDetailVC *labelsDetailVc = [[LSTEtagLogOffDetailVC alloc] init];
+            labelsDetailVc.model = self.carModel;
+            labelsDetailVc.orderModel = self.orderModel;
+            [self.navigationController pushViewController:labelsDetailVc animated:YES];
+            
+        } failure:^(NSError *error) {
+            [self.view makeToast:@""];
+        }];
+    } failure:^(NSError *error) {
+         [self.view makeToast:@""];
+    }];
 }
 - (void)tapSenderButton
 {
@@ -136,8 +146,21 @@
 }
 - (void)senderAuthCode
 {
-    /** 发送验证码调用接口*/
+    /** 发送验证码调用接口，之前业务需要调用两层接口，先获取passwordToken*/
+    [LSTEtagLogoffAPI getPassWordTokenWithPhoneNumber:self.carModel.phone success:^(id result) {
+   
+        self.pwdToken = result[@"data"][@"passwordToken"];
+        [LSTEtagLogoffAPI getAuthCodeWithPassWordToken:self.pwdToken success:^(id result) {
+            [self.view makeToast:@"发送成功"];
+        } failure:^(NSError *error) {
+            [self.view makeToast:@""];
+        }];
+        
+    } failure:^(NSError *error) {
+        [self.view makeToast:@""];
+    }];
 }
+
 - (void)timeOut
 {
     /** 倒计时时间*/
@@ -179,14 +202,13 @@
 
 #pragma mark - setter,getter
 
-/** -------------------------------------------------视图控件的初始化-----------------------------------------------------*/
 - (UILabel *)remindeLable
 {
     if (!_remindeLable) {
         _remindeLable           = [[UILabel alloc] init];
         _remindeLable.font      = [UIFont systemFontOfSize:13];
         _remindeLable.textColor = LSTBlack24FontColor;
-        _remindeLable.text      = @"将向手机号1521****112发送验证码";
+        _remindeLable.text      = self.phoneNumberString;
     }
     return _remindeLable;
 }
@@ -194,7 +216,7 @@
 {
     if (!_commitButton) {
         _commitButton                        = [UIButton buttonWithType:UIButtonTypeCustom];
-        _commitButton.backgroundColor        = LSTGreenFontColor;
+        _commitButton.backgroundColor        = LSTBlack24FontColor;
         _commitButton.userInteractionEnabled = NO;
         [_commitButton setTitle:@"提交" forState:UIControlStateNormal];
         [_commitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

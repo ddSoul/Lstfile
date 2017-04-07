@@ -7,7 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LSTCarModel.h"
+#import "LSTEtagOrderModel.h"
 
 @interface LSTEtagLogOffDetailVC : UIViewController
+
+/**
+ * 卡信息Model
+ */
+@property (nonatomic, strong) LSTCarModel *model;
+
+/**
+ * 订单Model
+ */
+@property (nonatomic, strong) LSTEtagOrderModel *orderModel;
 
 @end

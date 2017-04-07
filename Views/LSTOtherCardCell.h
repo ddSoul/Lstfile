@@ -24,4 +24,9 @@
  */
 @property (copy, nonatomic) void (^chooseColorButtonTapHandler)(UIButton *button);
 
+/**
+ * 输入框击回调处理
+ */
+@property (copy, nonatomic) void (^textFiledEndEidtHandler)(NSString *cardNumber, NSString *phoneNumber);
+
 @end

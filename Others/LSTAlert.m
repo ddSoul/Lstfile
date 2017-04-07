@@ -77,3 +77,34 @@
 
 
 
+
+/**--------------------------------------------自定义LSTProgressHUB-----------------------------------------------*/
+
+@implementation LSTProgressHUB
+
++ (void)showProgress
+{
+    MBProgressHUD *hub = [MBProgressHUD show];
+    [hub showAnimated:YES];
+}
+
++ (void)dismissProgress
+{
+    [MBProgressHUD dismiss];
+}
+
++ (void)showSuccessWithString:(NSString *)successString
+{
+    MBProgressHUD *hub = [MBProgressHUD showText:successString];
+    [hub hideAnimated:YES afterDelay:2.0f];
+}
++ (void)showErrorWithString:(NSString *)errorString
+{
+    MBProgressHUD *hub = [MBProgressHUD showText:errorString];
+    [hub hideAnimated:YES afterDelay:2.0f];
+}
+
+@end
+
+
+

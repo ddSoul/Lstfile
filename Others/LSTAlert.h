@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MBProgressHUD.h"
 
 typedef NS_ENUM(NSInteger,LSTAlertControllerStyle){
     LSTAlertControllerStyleActionSheet = 0,//默认Alert
@@ -55,40 +56,41 @@ typedef NS_ENUM(NSInteger,LSTAlertControllerStyle){
 
 @end
 
-/**----------------------------------自定义LSTProgressHUB----------------------------------**/
 
-///** ProgressHUB*/
-//@interface LSTProgressHUB : NSObject
-//
-///**
-// *  显示progress
-// */
-//+ (void)showStatus;
-//
-///**
-// *  progress消失
-// */
+
+
+/**----------------------------------自定义LSTProgressHUB----------------------------------*/
+
+/** ProgressHUB*/
+@interface LSTProgressHUB : NSObject
+
++ (void)showProgress;
+
++ (void)dismissProgress;
+/**
+ *  progress消失
+ */
 //+ (void)statusDismiss;
-//
-///**
-// *  文字提示
-// *
-// *  @param errorString 错误文字
-// */
-//+ (void)showErrorWithString:(NSString *)errorString;
-//
-///**
-// *  文字提示
-// *
-// *  @param successString
-// */
-//+ (void)showSuccessWithString:(NSString *)successString;
-//
-//
-///**
-// * 错误提示
-// *
-// */
+
+/**
+ *  文字提示
+ *
+ *  @param errorString 错误文字
+ */
++ (void)showErrorWithString:(NSString *)errorString;
+
+/**
+ *  文字提示
+ *
+ *  @param successString
+ */
++ (void)showSuccessWithString:(NSString *)successString;
+
+
+/**
+ * 错误提示
+ *
+ */
 //+ (void)showLocalErrorWithImage:(NSString *)imageName errorString:(NSString *)errorStr;
-//
-//@end
+
+@end

@@ -8,6 +8,12 @@
 //
 
 #import "LSTCarInfoCell.h"
+#import "LSTCarModel.h"
+
+#define FOND_SIZE_14 ([UIFont systemFontOfSize:14])
+
+static const CGFloat left_Padding = 10.f;
+static const CGFloat line_Space = 10.f;
 
 @interface LSTCarInfoCell ()
 {
@@ -55,17 +61,17 @@
 - (void)createControls
 {
     _carNumberHintLabel = [[UILabel alloc] init];
-    _carNumberHintLabel.font = [UIFont systemFontOfSize:14];
+    _carNumberHintLabel.font = FOND_SIZE_14;
     _carNumberHintLabel.text = @"车  牌  号:";
     [self.contentView addSubview:_carNumberHintLabel];
     
     _carColorHintLabel = [[UILabel alloc] init];
-    _carColorHintLabel.font = [UIFont systemFontOfSize:14];
+    _carColorHintLabel.font = FOND_SIZE_14;
     _carColorHintLabel.text = @"车牌颜色:";
     [self.contentView addSubview:_carColorHintLabel];
     
     _stCarNumberHintLabel = [[UILabel alloc] init];
-    _stCarNumberHintLabel.font = [UIFont systemFontOfSize:14];
+    _stCarNumberHintLabel.font = FOND_SIZE_14;
     _stCarNumberHintLabel.text = @"速通卡号:";
     [self.contentView addSubview:_stCarNumberHintLabel];
     
@@ -75,25 +81,25 @@
     [self.contentView addSubview:_telHintLabel];
     
     _carNumberLabel = [[UILabel alloc] init];
-    _carNumberLabel.font = [UIFont systemFontOfSize:14];
+    _carNumberLabel.font = FOND_SIZE_14;
     _carNumberLabel.textColor = LSTBlack24FontColor;
     _carNumberLabel.text = @"京A88888";
     [self.contentView addSubview:_carNumberLabel];
     
     _carColorLabel = [[UILabel alloc] init];
-    _carColorLabel.font = [UIFont systemFontOfSize:14];
+    _carColorLabel.font = FOND_SIZE_14;
     _carColorLabel.text = @"彩色";
     _carColorLabel.textColor = LSTBlack24FontColor;
     [self.contentView addSubview:_carColorLabel];
     
     _stCarNumberLabel = [[UILabel alloc] init];
-    _stCarNumberLabel.font = [UIFont systemFontOfSize:14];
+    _stCarNumberLabel.font = FOND_SIZE_14;
     _stCarNumberLabel.text = @"6666666666666666";
     _stCarNumberLabel.textColor = LSTBlack24FontColor;
     [self.contentView addSubview:_stCarNumberLabel];
     
     _telLabel = [[UILabel alloc] init];
-    _telLabel.font = [UIFont systemFontOfSize:14];
+    _telLabel.font = FOND_SIZE_14;
     _telLabel.text = @"18888999999";
     _telLabel.textColor = LSTBlack24FontColor;
     [self.contentView addSubview:_telLabel];
@@ -117,6 +123,7 @@
     [self layoutCustomViews];
     
 }
+/** 布局*/
 - (void)layoutCustomViews
 {
     __weak typeof(self) weakSelf = self;
@@ -133,43 +140,43 @@
     }];
     
     [_carNumberHintLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(10);
-        make.top.mas_equalTo(_1pLineView.mas_bottom).mas_equalTo(10);
+        make.left.mas_equalTo(left_Padding);
+        make.top.mas_equalTo(_1pLineView.mas_bottom).mas_equalTo(line_Space);
     }];
     
     [_carColorHintLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(10);
-        make.top.mas_equalTo(_carNumberHintLabel.mas_bottom).mas_offset(10);
+        make.left.mas_equalTo(left_Padding);
+        make.top.mas_equalTo(_carNumberHintLabel.mas_bottom).mas_offset(line_Space);
     }];
     
     [_stCarNumberHintLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(10);
-        make.top.mas_equalTo(_carColorHintLabel.mas_bottom).mas_offset(10);
+        make.left.mas_equalTo(left_Padding);
+        make.top.mas_equalTo(_carColorHintLabel.mas_bottom).mas_offset(line_Space);
     }];
     
     [_telHintLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(10);
-        make.top.mas_equalTo(_stCarNumberHintLabel.mas_bottom).mas_equalTo(10);
+        make.left.mas_equalTo(left_Padding);
+        make.top.mas_equalTo(_stCarNumberHintLabel.mas_bottom).mas_equalTo(line_Space);
     }];
     
     [_carNumberLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_carNumberHintLabel.mas_right).mas_offset(10);
-        make.top.mas_equalTo(_1pLineView.mas_bottom).mas_offset(10);
+        make.left.mas_equalTo(_carNumberHintLabel.mas_right).mas_offset(left_Padding);
+        make.top.mas_equalTo(_1pLineView.mas_bottom).mas_offset(line_Space);
     }];
     
     [_carColorLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_carColorHintLabel.mas_right).mas_offset(10);
-        make.top.mas_equalTo(_carNumberLabel.mas_bottom).mas_offset(10);
+        make.left.mas_equalTo(_carColorHintLabel.mas_right).mas_offset(left_Padding);
+        make.top.mas_equalTo(_carNumberLabel.mas_bottom).mas_offset(line_Space);
     }];
     
     [_stCarNumberLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_stCarNumberHintLabel.mas_right).mas_offset(10);
-        make.top.mas_equalTo(_carColorLabel.mas_bottom).mas_offset(10);
+        make.left.mas_equalTo(_stCarNumberHintLabel.mas_right).mas_offset(left_Padding);
+        make.top.mas_equalTo(_carColorLabel.mas_bottom).mas_offset(line_Space);
     }];
     
     [_telLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_telHintLabel.mas_right).mas_offset(10);
-        make.top.mas_equalTo(_stCarNumberLabel.mas_bottom).mas_offset(10);
+        make.left.mas_equalTo(_telHintLabel.mas_right).mas_offset(left_Padding);
+        make.top.mas_equalTo(_stCarNumberLabel.mas_bottom).mas_offset(line_Space);
     }];
     
     [_selectImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -181,7 +188,7 @@
     [_bottomLineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.mas_equalTo(0);
         make.height.mas_equalTo(1);
-        make.top.mas_equalTo(_telHintLabel.mas_bottom).mas_offset(10);
+        make.top.mas_equalTo(_telHintLabel.mas_bottom).mas_offset(line_Space);
     }];
     
 }
@@ -195,9 +202,17 @@
     }
 }
 
+- (void)setCarModel:(LSTCarModel *)carModel
+{
+    _carNumberLabel.text = carModel.vehicleInfo.vehicleLicense.licensePlateNumber;
+    _carColorLabel.text = carModel.vehicleInfo.vehicleColor;
+    _stCarNumberLabel.text = carModel.cardNo;
+    _telLabel.text = carModel.phone;
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-    
+
     // Configure the view for the selected state
 }
 

@@ -7,8 +7,16 @@
 //
 
 #import "LSTEtagLogOffDetailVC.h"
-
 #import "LSTETagDetailView.h"
+
+#import "LSTAlert.h"
+#import "LSTEtagLogoffAPI.h"
+#import "UIView+Toast.h"
+
+static const CGFloat left_Right_Padiing = 10.f;
+static const CGFloat eTagView_Height = 300.f;
+static const CGFloat sure_Button_Height = 40.f;
+static const CGFloat button_Radius = 5.f;
 
 @interface LSTEtagLogOffDetailVC ()
 
@@ -38,14 +46,14 @@
     [self configNavigationRightItem];
     
     [self.etagDetailView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
-        make.height.mas_equalTo(300);
+        make.left.top.mas_equalTo(left_Right_Padiing);
+        make.right.mas_equalTo(-left_Right_Padiing);
+        make.height.mas_equalTo(eTagView_Height);
     }];
     [self.suerButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(10);
-        make.right.bottom.mas_equalTo(-10);
-        make.height.mas_equalTo(50);
+        make.left.mas_equalTo(left_Right_Padiing);
+        make.right.bottom.mas_equalTo(-left_Right_Padiing);
+        make.height.mas_equalTo(sure_Button_Height);
     }];
 }
 /** 导航栏右侧取消按钮*/
@@ -68,16 +76,35 @@
 /** 从网络加载Etag数据*/
 - (void)loadEtagInfo
 {
-    NSLog(@"___加载Etag信息数据");
-//    self.etagDetailView.eTagModel = nil;
+    self.etagDetailView.carModel = self.model;
 }
 - (void)tapSureButton:(UIButton *)button
 {
-    NSLog(@"___确认按钮点击");
+    __weak typeof(self) weakSelf = self;
+    [LSTAlert configeAlertViewControllerWithTitle:@"您确认注销该电子标签？" message:nil style:LSTAlertControllerStyleAlert atPersentVC:self suerAction:^(UIAlertAction *action) {
+       //确认提交注销申请
+        [LSTEtagLogoffAPI commitEtagLogOffApplyWithOrderNo:weakSelf.orderModel.orderNo carModel:weakSelf.model success:^(id result) {
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        } failure:^(NSError *error) {
+            [self.view makeToast:@"出错了"];
+        }];
+    } cancalAction:^(UIAlertAction *action) {
+        //取消Alert
+    }];
 }
 - (void)cancel
 {
-    NSLog(@"___取消");
+    [LSTAlert configeAlertViewControllerWithTitle:@"您确认取消注销该电子标签？" message:nil style:LSTAlertControllerStyleAlert atPersentVC:self suerAction:^(UIAlertAction *action) {
+        //确认取消
+        [LSTEtagLogoffAPI alterOrderStatusWithOderNo:self.orderModel.orderNo success:^(id result) {
+            [self.view makeToast:@"操作成功"];
+        } failure:^(NSError *error) {
+            [self.view makeToast:@""];
+        }];
+
+    } cancalAction:^(UIAlertAction *action) {
+        //取消Alert
+    }];
 }
 
 #pragma mark - touch events
@@ -88,7 +115,7 @@
     if (!_etagDetailView) {
         _etagDetailView                     = [[LSTETagDetailView alloc] init];
         _etagDetailView.backgroundColor     = [UIColor whiteColor];
-        _etagDetailView.layer.cornerRadius  = 5;
+        _etagDetailView.layer.cornerRadius  = button_Radius;
     }
     return _etagDetailView;
 }
@@ -97,7 +124,7 @@
     if (!_suerButton) {
         _suerButton                     = [UIButton buttonWithType:UIButtonTypeCustom];
         _suerButton.backgroundColor     = LSTGreenFontColor;
-        _suerButton.layer.cornerRadius  = 5;
+        _suerButton.layer.cornerRadius  = button_Radius;
         [_suerButton setTitle:@"确定" forState:UIControlStateNormal];
         [_suerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_suerButton addTarget:self action:@selector(tapSureButton:) forControlEvents:UIControlEventTouchUpInside];

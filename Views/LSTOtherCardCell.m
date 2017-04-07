@@ -9,9 +9,12 @@
 #import "LSTOtherCardCell.h"
 #import "UIButton+Edge.h"
 
-@interface LSTOtherCardCell ()
+#define CAR_NUMBER_TAG (10)
+#define PHONE_NUMBER_TAG (20)
+
+@interface LSTOtherCardCell ()<UITextFieldDelegate>
 {
-    UILabel *_titlelabel;
+    UILabel *_titlelabel;/** 顶部提示文字*/
     UILabel *_carNumberlabel;
     UILabel *_carColorLabel;
     
@@ -31,6 +34,9 @@
     UILabel *_telLabel;
     UITextField *_inputTelTf;
     
+    NSString *_saveCarNumber;
+    NSString *_savePhoneNumber;
+
 }
 @end
 
@@ -74,6 +80,8 @@
     
     _carNumberTf                = [[UITextField alloc] init];
     _carNumberTf.placeholder    = @"请输入车牌号";
+    _carNumberTf.tag            = CAR_NUMBER_TAG;
+    _carNumberTf.delegate       = self;
     _carNumberTf.textAlignment  = NSTextAlignmentRight;
     _carNumberTf.font           = [UIFont systemFontOfSize:14];
     _carNumberTf.textColor      = LSTBlack24FontColor;
@@ -86,6 +94,8 @@
     
     _inputTelTf                 = [[UITextField alloc] init];
     _inputTelTf.placeholder     = @"请输入手机号";
+    _inputTelTf.tag             = PHONE_NUMBER_TAG;
+    _inputTelTf.delegate        = self;
     _inputTelTf.font            = [UIFont systemFontOfSize:14];
     _inputTelTf.textColor       = LSTBlack24FontColor;
     _inputTelTf.textAlignment   = NSTextAlignmentRight;
@@ -112,15 +122,15 @@
     _1pLineView_2 = [[UIView alloc] init];
     _1pLineView_2.backgroundColor = LSTLine1Color;
     [self.contentView addSubview:_1pLineView_2];
-    
+
     _1pLineView_3 = [[UIView alloc] init];
     _1pLineView_3.backgroundColor = LSTLine1Color;
     [self.contentView addSubview:_1pLineView_3];
-    
+
     _1pLineView_4 = [[UIView alloc] init];
     _1pLineView_4.backgroundColor = LSTLine1Color;
     [self.contentView addSubview:_1pLineView_4];
-    
+
     
     _20pLineView = [[UIView alloc] init];
     _20pLineView.backgroundColor = LSTLineWColor;
@@ -139,6 +149,7 @@
     
     [_1pLineView_1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.left.mas_equalTo(0);
+        make.height.mas_equalTo(1);
         make.top.mas_equalTo(_20pLineView.mas_bottom).mas_offset(0);
     }];
     
@@ -159,7 +170,7 @@
         make.height.mas_equalTo(1);
         make.bottom.mas_equalTo(0);
     }];
-    
+
 }
 
 #pragma mark - eventTouch Methods
@@ -171,6 +182,21 @@
     }
 }
 
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    if (textField.tag == CAR_NUMBER_TAG) {
+        _saveCarNumber = textField.text;
+    }else if(textField.tag == PHONE_NUMBER_TAG){
+        _savePhoneNumber = textField.text;
+    };
+    
+    if (_savePhoneNumber.length && _saveCarNumber.length) {
+        if (self.textFiledEndEidtHandler) {
+            self.textFiledEndEidtHandler(_saveCarNumber, _savePhoneNumber);
+        }
+    }
+    return YES;
+}
 
 #pragma mark - custom Methods
 /** 视图隐藏与否*/
@@ -220,7 +246,7 @@
             make.top.mas_equalTo(_20pLineView.mas_bottom).mas_offset(0);
             make.height.mas_equalTo(1);
         }];
-        
+
         /** 第一行*/
         [_titlelabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(10);
@@ -257,7 +283,7 @@
             make.left.mas_equalTo(10);
             make.top.mas_equalTo(_carNumberlabel.mas_bottom).mas_offset(20);
         }];
-        
+
         [_selCarColorBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(0);
             make.width.mas_equalTo(100);
@@ -369,12 +395,11 @@
         
     }
     
-    [self layoutIfNeeded];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-    
+
     // Configure the view for the selected state
 }
 
