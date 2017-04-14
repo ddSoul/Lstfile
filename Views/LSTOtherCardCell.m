@@ -18,7 +18,7 @@
     UILabel *_carNumberlabel;
     UILabel *_carColorLabel;
     
-    UIImageView *_selectImageView;
+    UIImageView *_selectImageView; //选择图片
     UITextField *_carNumberTf;
     UIButton *_selCarColorBtn;
     
